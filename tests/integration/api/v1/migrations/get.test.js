@@ -2,17 +2,16 @@
 // Ele tem a função database.query(...) que executa SQL no PostgreSQL
 import database from "infra/database.js";
 
-// beforeAll é um hook do Jest: roda UMA vez antes de todos os testes deste arquivo
-// Aqui a gente usa isso pra garantir que o banco começa limpo e previsível
-beforeAll(cleanDatabase);
+import orchestrator from "tests/orchestrator.js";
 
-// Função que "zera" o banco antes do teste
-async function cleanDatabase() {
+// beforeAll é um hook do Jest: roda UMA vez antes de todos os testes deste arquivo
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
   // Apaga completamente o schema public (tabelas, migrations table, etc)
   // e recria ele vazio
   // O "cascade" garante que tudo que depende do schema também é removido
   await database.query("drop schema public cascade; create schema public;");
-}
+});
 
 // Teste de integração do endpoint GET /api/v1/migrations
 // A ideia: chamar o endpoint e verificar se ele responde corretamente
