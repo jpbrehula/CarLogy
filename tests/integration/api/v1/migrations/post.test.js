@@ -2,18 +2,15 @@
 // Esse módulo expõe funções como database.query(...)
 import database from "infra/database.js";
 
-// beforeAll é um hook do Jest
-// Ele roda UMA VEZ antes de TODOS os testes deste arquivo
-beforeAll(cleanDatabase);
+import orchestrator from "tests/orchestrator.js";
 
-// Função responsável por garantir que o banco esteja limpo antes dos testes
-// Isso evita que um teste influencie o resultado do outro
-async function cleanDatabase() {
-  // Remove todo o schema public (tabelas, migrations, etc)
-  // e recria o schema vazio novamente
-  // CASCADE garante que tudo dependente também seja apagado
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
+  // Apaga completamente o schema public (tabelas, migrations table, etc)
+  // e recria ele vazio
+  // O "cascade" garante que tudo que depende do schema também é removido
   await database.query("drop schema public cascade; create schema public;");
-}
+});
 
 // Teste principal do arquivo
 // Verifica o comportamento do endpoint POST /api/v1/migrations
