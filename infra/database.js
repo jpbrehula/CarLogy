@@ -78,10 +78,11 @@ async function getNewClient() {
 // database.query(...)
 // database.getNewClient()
 // ======================================================
-export default {
+const database = {
   query,
   getNewClient,
 };
+export default database;
 
 // ======================================================
 // Função responsável por decidir como o SSL será usado
