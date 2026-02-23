@@ -2,9 +2,9 @@
 // Essa lib sabe ler arquivos de migration e controlar o que já rodou
 import migrationRunner from "node-pg-migrate";
 
-// Importa a função join para montar caminhos de pastas
+// Importa a função resolve para montar caminhos de pastas
 // Evita problemas de path entre sistemas (Windows, Mac, Linux)
-import { join } from "node:path";
+import { resolve } from "node:path";
 
 // Importa o módulo de banco de dados que você criou
 // Ele fornece getNewClient() para abrir conexões com o banco
@@ -38,7 +38,7 @@ export default async function migrations(request, response) {
       dryRun: true,
 
       // Diretório onde estão os arquivos de migration
-      dir: join("infra", "migrations"),
+      dir: resolve("infra", "migrations"),
 
       // Direção das migrations
       // "up" = aplicar migrations pendentes
