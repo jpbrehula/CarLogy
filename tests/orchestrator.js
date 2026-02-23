@@ -1,4 +1,7 @@
 import retry from "async-retry";
+// Importa o módulo de banco (infra/database.js)
+// Ele tem a função database.query(...) que executa SQL no PostgreSQL
+import database from "infra/database.js";
 
 async function waitForAllServices() {
   await waitForWebServer();
@@ -19,7 +22,15 @@ async function waitForAllServices() {
   }
 }
 
+async function clearDatabase() {
+  // Apaga completamente o schema public (tabelas, migrations table, etc)
+  // e recria ele vazio
+  // O "cascade" garante que tudo que depende do schema também é removido
+  await database.query("drop schema public cascade; create schema public;");
+}
+
 const orchestrator = {
   waitForAllServices,
+  clearDatabase,
 };
 export default orchestrator;

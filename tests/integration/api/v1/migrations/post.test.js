@@ -1,15 +1,8 @@
-// Importa o módulo de banco de dados que você criou em infra/database.js
-// Esse módulo expõe funções como database.query(...)
-import database from "infra/database.js";
-
 import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  // Apaga completamente o schema public (tabelas, migrations table, etc)
-  // e recria ele vazio
-  // O "cascade" garante que tudo que depende do schema também é removido
-  await database.query("drop schema public cascade; create schema public;");
+  await orchestrator.clearDatabase();
 });
 
 describe("POST /api/v1/migrations", () => {
