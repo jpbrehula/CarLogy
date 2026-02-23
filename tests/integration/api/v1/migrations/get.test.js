@@ -13,25 +13,29 @@ beforeAll(async () => {
   await database.query("drop schema public cascade; create schema public;");
 });
 
-// Teste de integração do endpoint GET /api/v1/migrations
-// A ideia: chamar o endpoint e verificar se ele responde corretamente
-test("GET to /api/v1/migrations should return 200", async () => {
-  // Faz uma requisição HTTP GET para o endpoint de migrations
-  // GET aqui serve para "listar" as migrations pendentes (não executa)
-  const response = await fetch("http://localhost:3000/api/v1/migrations");
+describe("GET /api/v1/migrations", () => {
+  describe("Anonymous user", () => {
+    // Teste de integração do endpoint GET /api/v1/migrations
+    // A ideia: chamar o endpoint e verificar se ele responde corretamente
+    test("Retrieving pending migrations", async () => {
+      // Faz uma requisição HTTP GET para o endpoint de migrations
+      // GET aqui serve para "listar" as migrations pendentes (não executa)
+      const response = await fetch("http://localhost:3000/api/v1/migrations");
 
-  // Verifica o status HTTP retornado
-  // 200 = OK (a requisição funcionou)
-  expect(response.status).toBe(200);
+      // Verifica o status HTTP retornado
+      // 200 = OK (a requisição funcionou)
+      expect(response.status).toBe(200);
 
-  // Converte o corpo da resposta para JSON
-  // O endpoint deve retornar uma lista (array) com as migrations pendentes
-  const responseBody = await response.json();
+      // Converte o corpo da resposta para JSON
+      // O endpoint deve retornar uma lista (array) com as migrations pendentes
+      const responseBody = await response.json();
 
-  // Garante que o corpo retornado é um array
-  expect(Array.isArray(responseBody)).toBe(true);
+      // Garante que o corpo retornado é um array
+      expect(Array.isArray(responseBody)).toBe(true);
 
-  // Garante que existe pelo menos 1 migration pendente
-  // Como o banco foi limpo no beforeAll, deve ter migrations para aplicar
-  expect(responseBody.length).toBeGreaterThan(0);
+      // Garante que existe pelo menos 1 migration pendente
+      // Como o banco foi limpo no beforeAll, deve ter migrations para aplicar
+      expect(responseBody.length).toBeGreaterThan(0);
+    });
+  });
 });
