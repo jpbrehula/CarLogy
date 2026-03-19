@@ -1,7 +1,7 @@
 {
-  "name": "precar",
+  "name": "carlogy",
   "version": "1.0.0",
-  "description": "Precar é uma plataforma de pré-compra automotiva guiada por IA, projetada para ajudar os compradores de carros a fazerem uma inspeção completa e técnica antes de realizar a compra, gerando um laudo detalhado e seguro.",
+  "description": "Carlogy é uma plataforma para cuidar do historico de manutencao e preparacao do seu carro",
   "main": "index.js",
   "scripts": {
     "dev": "node infra/scripts/postdev.js",
