@@ -1,48 +1,72 @@
-# 🚗 Precar
+# 🚗 Carlogy
 
-Precar é uma plataforma de **pré-compra automotiva guiada por IA**, projetada para ajudar compradores de carros a realizarem uma inspeção técnica completa antes da compra, gerando um **laudo estruturado, claro e seguro**.
+Carlogy é uma plataforma de **gestão de histórico automotivo**, projetada para ajudar proprietários a organizarem, acompanharem e valorizarem a vida completa de seus veículos.
 
-A proposta é transformar a insegurança da compra de um carro usado em um processo técnico, guiado e orientado por dados.
+A proposta é transformar a manutenção de um carro — hoje desorganizada e esquecida — em um sistema **estruturado, previsível e rastreável**.
 
 ---
 
 ## 🎯 Problema
 
-Comprar um carro usado envolve riscos:
+A manutenção de veículos hoje é mal gerenciada:
 
-- Defeitos ocultos
-- Custos futuros inesperados
-- Falta de conhecimento técnico
-- Informações espalhadas e inconsistentes
+- Histórico perdido ou incompleto
+- Falta de organização de notas fiscais e serviços
+- Esquecimento de manutenções importantes
+- Baixa previsibilidade de custos
+- Dificuldade em comprovar cuidados na revenda
 
-A maioria das pessoas não sabe **o que verificar**, **como verificar** e **quanto isso impacta no valor final do veículo**.
+A maioria das pessoas não possui um **controle confiável da vida do próprio carro**.
 
 ---
 
 ## 💡 Solução
 
-O Precar funciona como um **inspetor digital de bolso**, guiando o usuário durante a visita ao veículo:
+O Carlogy funciona como um **registro inteligente da vida do veículo**, centralizando todas as informações importantes:
 
-- Checklist técnico inteligente por modelo
-- Registro estruturado de problemas encontrados
-- Estimativa de custo de reparos
-- Sugestão de valor de oferta
-- Geração de relatório consolidado
+- Registro de manutenções realizadas
+- Upload de notas fiscais e fotos
+- Histórico completo e organizado
+- Controle de upgrades e modificações
+- Alertas inteligentes baseados em tempo e quilometragem
+- Sugestões de manutenção com base no manual do veículo
+- Geração de histórico confiável para revenda
+
+---
+
+## 🚀 Funcionalidades (MVP)
+
+- Cadastro de veículo (modelo, ano, KM atual)
+- Registro manual de manutenções
+- Upload de imagens (notas fiscais e serviços)
+- Timeline de histórico do veículo
+- Alertas básicos de manutenção
+- Base inicial de recomendações por veículo
+
+---
+
+## 🔮 Visão de Produto
+
+O Carlogy evolui para se tornar a **fonte de verdade da vida de um carro**:
+
+- Integração com manuais de fábrica
+- Sugestões automatizadas de manutenção
+- Análise inteligente de custos
+- Compartilhamento de histórico via link ou QR Code
+- Transferência de histórico entre proprietários
+- Integração com oficinas e prestadores de serviço
 
 ---
 
 ## 🧱 Arquitetura
 
-Este repositório representa a **fundação do sistema**, construída com foco em:
+Este repositório representa a base do sistema, com foco em:
 
 - Organização em camadas
-- Separação clara de responsabilidades
-- Testes automatizados
-- CI (Continuous Integration)
-- Padrão Conventional Commits
-- Configuração de ambiente isolado com Docker
-
-A base foi construída para permitir evolução segura do produto.
+- Separação de responsabilidades
+- APIs versionadas (`/api/v1`)
+- Estrutura preparada para escala
+- Boas práticas de desenvolvimento
 
 ---
 
@@ -50,15 +74,33 @@ A base foi construída para permitir evolução segura do produto.
 
 - Node.js
 - Next.js
-- Jest
+- PostgreSQL
 - Docker
+- Jest
 - ESLint
-- Commitlint (Conventional Commits)
 - GitHub Actions
-- async-retry
+- SWR
 
 ---
 
 ## 🧪 Testes
 
-O projeto utiliza testes automatizados de integração.
+O projeto utiliza testes automatizados para garantir estabilidade e confiabilidade do sistema.
+
+---
+
+## 📈 Objetivo
+
+Construir a principal plataforma de gestão de histórico automotivo no Brasil, permitindo que qualquer pessoa tenha controle total sobre seu veículo.
+
+---
+
+## 📌 Status
+
+🚧 Em desenvolvimento (MVP)
+
+---
+
+## 👤 Autor
+
+João Pedro Brehula
