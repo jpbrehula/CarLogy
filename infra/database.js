@@ -1,23 +1,24 @@
 import { Client } from "pg";
+import { ServiceError } from "infra/errors";
 
-// Executa uma query e garante o encerramento da conexão.
 async function query(queryObject) {
   let client;
 
   try {
     client = await getNewClient();
-    return await client.query(queryObject);
+    const result = await client.query(queryObject);
+    return result;
   } catch (error) {
-    console.error("\nErro ao executar query em database.js:");
-    console.error(error);
-    throw error;
+    const serviceErrorObject = new ServiceError({
+      message: "Erro na conexão com Banco ou na Query.",
+      cause: error,
+    });
+    throw serviceErrorObject;
   } finally {
-    // Evita erro caso a conexão não tenha sido criada.
     await client?.end();
   }
 }
 
-// Cria e conecta um novo client com base nas variáveis de ambiente.
 async function getNewClient() {
   const client = new Client({
     host: process.env.POSTGRES_HOST,
@@ -32,7 +33,6 @@ async function getNewClient() {
   return client;
 }
 
-// Define a configuração de SSL conforme o ambiente.
 function getSSLValues() {
   if (process.env.POSTGRES_CA) {
     return {
@@ -40,7 +40,7 @@ function getSSLValues() {
     };
   }
 
-  return process.env.NODE_ENV === "production";
+  return process.env.NODE_ENV === "production" ? true : false;
 }
 
 const database = {
