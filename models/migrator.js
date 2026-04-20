@@ -4,12 +4,19 @@ import { resolve } from "node:path";
 import database from "infra/database.js";
 import { ServiceError } from "infra/errors.js";
 
+const silentMigrationLogger = {
+  debug: () => {},
+  info: () => {},
+  warn: console.warn,
+  error: console.error,
+};
 // Configuração base compartilhada entre a listagem e a execução das migrations.
 const defaultMigrationOptions = {
   dryRun: true,
   dir: resolve("infra", "migrations"),
   direction: "up",
-  verbose: true,
+  logger: silentMigrationLogger,
+  verbose: false,
   migrationsTable: "pgmigrations",
 };
 
