@@ -9,7 +9,7 @@ function cleanup() {
   console.log("\n🛑 Parando serviços...");
 
   try {
-    execSync("npm run services:down", { stdio: "inherit" });
+    execSync("npm run services:stop", { stdio: "inherit" });
   } catch (error) {
     console.error("Erro ao parar serviços:", error);
   }
