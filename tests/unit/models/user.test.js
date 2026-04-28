@@ -45,7 +45,7 @@ describe("models/user", () => {
       }),
     ).rejects.toMatchObject({
       name: "ValidationError",
-      message: "O email informado ja está sendo utilizado.",
+      message: "O email informado já está sendo utilizado.",
       action: "Utilize outro email para realizar o cadastro.",
       statusCode: 400,
     });
@@ -70,7 +70,7 @@ describe("models/user", () => {
       }),
     ).rejects.toMatchObject({
       name: "ValidationError",
-      message: "O username informado ja está sendo utilizado.",
+      message: "O username informado já está sendo utilizado.",
       action: "Utilize outro username para realizar o cadastro.",
       statusCode: 400,
     });
