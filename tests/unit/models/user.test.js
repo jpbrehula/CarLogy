@@ -26,6 +26,24 @@ describe("models/user", () => {
     expect(mockDatabaseQuery).not.toHaveBeenCalled();
   });
 
+  test("throws ValidationError when username has non-alphanumeric characters", async () => {
+    await expect(
+      user.create({
+        username: "joao-pedro",
+        email: "joao@gmail.com",
+        password: "senha123",
+      }),
+    ).rejects.toMatchObject({
+      name: "ValidationError",
+      message: "O username deve conter apenas caracteres alfanuméricos.",
+      action:
+        "Informe um username sem caracteres especiais para realizar o cadastro.",
+      statusCode: 400,
+    });
+
+    expect(mockDatabaseQuery).not.toHaveBeenCalled();
+  });
+
   test("throws ValidationError when database rejects a duplicated email during insert", async () => {
     mockDatabaseQuery
       .mockResolvedValueOnce({ rowCount: 0 })

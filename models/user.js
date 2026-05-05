@@ -35,6 +35,9 @@ async function findOneByUsername(username) {
 
 async function create(userInputValues) {
   validateRequiredFields(userInputValues);
+  validateUsername(userInputValues.username, {
+    action: "Informe um username sem caracteres especiais para realizar o cadastro.",
+  });
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
   await hashPasswordInObject(userInputValues);
@@ -143,7 +146,9 @@ async function update(username, userInputValues) {
   validateAtLeastOneUpdatableField(userInputValues);
 
   if ("username" in userInputValues) {
-    validateUsername(userInputValues.username);
+    validateUsername(userInputValues.username, {
+      action: "Informe um username sem caracteres especiais para realizar esta operação.",
+    });
     await validateUniqueUsername(userInputValues.username, currentUser.id);
   }
 
@@ -203,11 +208,20 @@ function validateAtLeastOneUpdatableField(userInputValues) {
   }
 }
 
-function validateUsername(username) {
+function validateUsername(username, options = {}) {
   if (!username?.trim()) {
     throw new ValidationError({
       message: "O username é obrigatório.",
       action: "Informe um username para realizar esta operação.",
+    });
+  }
+
+  if (!/^[a-zA-Z0-9]+$/.test(username)) {
+    throw new ValidationError({
+      message: "O username deve conter apenas caracteres alfanuméricos.",
+      action:
+        options.action ||
+        "Informe um username sem caracteres especiais para realizar esta operação.",
     });
   }
 }
