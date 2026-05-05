@@ -330,7 +330,9 @@ async function expectSuccessfulUpdate(response, createdUser, expectedValues) {
   expect(Date.parse(responseBody.created_at)).not.toBeNaN();
   expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
   expect(responseBody.updated_at > responseBody.created_at).toBe(true);
-  expect(responseBody.updated_at).not.toBe(createdUser.updated_at.toISOString());
+  expect(responseBody.updated_at).not.toBe(
+    createdUser.updated_at.toISOString(),
+  );
 
   return responseBody;
 }

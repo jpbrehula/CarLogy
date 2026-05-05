@@ -36,7 +36,8 @@ async function findOneByUsername(username) {
 async function create(userInputValues) {
   validateRequiredFields(userInputValues);
   validateUsername(userInputValues.username, {
-    action: "Informe um username sem caracteres especiais para realizar o cadastro.",
+    action:
+      "Informe um username sem caracteres especiais para realizar o cadastro.",
   });
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
@@ -147,7 +148,8 @@ async function update(username, userInputValues) {
 
   if ("username" in userInputValues) {
     validateUsername(userInputValues.username, {
-      action: "Informe um username sem caracteres especiais para realizar esta operação.",
+      action:
+        "Informe um username sem caracteres especiais para realizar esta operação.",
     });
     await validateUniqueUsername(userInputValues.username, currentUser.id);
   }
