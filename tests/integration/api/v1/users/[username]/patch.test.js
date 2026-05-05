@@ -34,7 +34,6 @@ describe("PATCH /api/v1/users/[username]", () => {
     test("With same 'username' but different case", async () => {
       const createdUser = await createUser({
         username: "user1",
-        email: "user1-case@gmail.com",
       });
 
       const response = await patchUser("user1", {
@@ -43,7 +42,6 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       const responseBody = await expectSuccessfulUpdate(response, createdUser, {
         username: "USER1",
-        email: "user1-case@gmail.com",
       });
 
       const userInDatabase = await expectUserInDatabase("user1", {
@@ -55,32 +53,29 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With unique 'username'", async () => {
       const createdUser = await createUser({
-        username: "unique-user1",
-        email: "unique-user1@gmail.com",
+        username: "uniqueuser1",
       });
 
-      const response = await patchUser("unique-user1", {
-        username: "unique-user2",
+      const response = await patchUser("uniqueuser1", {
+        username: "uniqueuser2",
       });
 
       await expectSuccessfulUpdate(response, createdUser, {
-        username: "unique-user2",
-        email: "unique-user1@gmail.com",
+        username: "uniqueuser2",
       });
 
-      await expectUserInDatabase("unique-user2", {
+      await expectUserInDatabase("uniqueuser2", {
         id: createdUser.id,
-        username: "unique-user2",
+        username: "uniqueuser2",
       });
     });
 
     test("With no updatable fields", async () => {
       await createUser({
-        username: "no-updatable-fields1",
-        email: "no-updatable-fields1@gmail.com",
+        username: "noupdatablefields1",
       });
 
-      const response = await patchUser("no-updatable-fields1", {});
+      const response = await patchUser("noupdatablefields1", {});
 
       await expectValidationError(response, {
         message: "Nenhum campo foi informado para atualização.",
@@ -90,11 +85,10 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With empty 'username'", async () => {
       await createUser({
-        username: "empty-username1",
-        email: "empty-username1@gmail.com",
+        username: "emptyusername1",
       });
 
-      const response = await patchUser("empty-username1", {
+      const response = await patchUser("emptyusername1", {
         username: "",
       });
 
@@ -106,11 +100,10 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With blank 'username'", async () => {
       await createUser({
-        username: "blank-username1",
-        email: "blank-username1@gmail.com",
+        username: "blankusername1",
       });
 
-      const response = await patchUser("blank-username1", {
+      const response = await patchUser("blankusername1", {
         username: "   ",
       });
 
@@ -120,18 +113,30 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
     });
 
-    test("With duplicated 'username'", async () => {
-      await createUser({
-        username: "duplicated-user1",
-        email: "duplicated-user1@gmail.com",
-      });
-      await createUser({
-        username: "duplicated-user2",
-        email: "duplicated-user2@gmail.com",
+    test("With invalid 'username'", async () => {
+      const createdUser = await createUser();
+
+      const response = await patchUser(createdUser.username, {
+        username: "invalid-username",
       });
 
-      const response = await patchUser("duplicated-user2", {
-        username: "duplicated-user1",
+      await expectValidationError(response, {
+        message: "O username deve conter apenas caracteres alfanuméricos.",
+        action:
+          "Informe um username sem caracteres especiais para realizar esta operação.",
+      });
+    });
+
+    test("With duplicated 'username'", async () => {
+      await createUser({
+        username: "duplicateduser1",
+      });
+      await createUser({
+        username: "duplicateduser2",
+      });
+
+      const response = await patchUser("duplicateduser2", {
+        username: "duplicateduser1",
       });
 
       await expectValidationError(response, {
@@ -142,15 +147,13 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With duplicated 'email'", async () => {
       await createUser({
-        username: "email1",
         email: "email1@gmail.com",
       });
-      await createUser({
-        username: "email2",
+      const createdUser = await createUser({
         email: "email2@gmail.com",
       });
 
-      const response = await patchUser("email2", {
+      const response = await patchUser(createdUser.username, {
         email: "email1@gmail.com",
       });
 
@@ -161,12 +164,9 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With empty 'email'", async () => {
-      await createUser({
-        username: "empty-email1",
-        email: "empty-email1@gmail.com",
-      });
+      const createdUser = await createUser();
 
-      const response = await patchUser("empty-email1", {
+      const response = await patchUser(createdUser.username, {
         email: "",
       });
 
@@ -177,12 +177,9 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With blank 'email'", async () => {
-      await createUser({
-        username: "blank-email1",
-        email: "blank-email1@gmail.com",
-      });
+      const createdUser = await createUser();
 
-      const response = await patchUser("blank-email1", {
+      const response = await patchUser(createdUser.username, {
         email: "   ",
       });
 
@@ -194,66 +191,61 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With unique 'email'", async () => {
       const createdUser = await createUser({
-        username: "unique-email1",
-        email: "unique-email1@gmail.com",
+        username: "uniqueemail1",
       });
 
-      const response = await patchUser("unique-email1", {
+      const response = await patchUser("uniqueemail1", {
         email: "unique-email2@gmail.com",
       });
 
       await expectSuccessfulUpdate(response, createdUser, {
-        username: "unique-email1",
+        username: "uniqueemail1",
         email: "unique-email2@gmail.com",
       });
     });
 
     test("With same 'email' but different case", async () => {
       const createdUser = await createUser({
-        username: "same-email1",
+        username: "sameemail1",
         email: "same-email1@gmail.com",
       });
 
-      const response = await patchUser("same-email1", {
+      const response = await patchUser("sameemail1", {
         email: "Same-Email1@gmail.com",
       });
 
       await expectSuccessfulUpdate(response, createdUser, {
-        username: "same-email1",
+        username: "sameemail1",
         email: "Same-Email1@gmail.com",
       });
     });
 
     test("With unique 'username' and unique 'email'", async () => {
       const createdUser = await createUser({
-        username: "unique-values1",
-        email: "unique-values1@gmail.com",
+        username: "uniquevalues1",
       });
 
-      const response = await patchUser("unique-values1", {
-        username: "unique-values2",
+      const response = await patchUser("uniquevalues1", {
+        username: "uniquevalues2",
         email: "unique-values2@gmail.com",
       });
 
       await expectSuccessfulUpdate(response, createdUser, {
-        username: "unique-values2",
+        username: "uniquevalues2",
         email: "unique-values2@gmail.com",
       });
 
-      await expectUserInDatabase("unique-values2", {
+      await expectUserInDatabase("uniquevalues2", {
         id: createdUser.id,
-        username: "unique-values2",
+        username: "uniquevalues2",
         email: "unique-values2@gmail.com",
       });
     });
 
     test("With empty 'password'", async () => {
-      await createUser({
-        username: "empty-password1",
-        email: "empty-password1@gmail.com",
-      });
+      const createdUser = await createUser();
 
-      const response = await patchUser("empty-password1", {
+      const response = await patchUser(createdUser.username, {
         password: "",
       });
 
@@ -264,12 +256,9 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With blank 'password'", async () => {
-      await createUser({
-        username: "blank-password1",
-        email: "blank-password1@gmail.com",
-      });
+      const createdUser = await createUser();
 
-      const response = await patchUser("blank-password1", {
+      const response = await patchUser(createdUser.username, {
         password: "   ",
       });
 
@@ -281,21 +270,19 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With new 'password'", async () => {
       const createdUser = await createUser({
-        username: "new-password1",
-        email: "new-password1@gmail.com",
+        username: "newpassword1",
         password: "old-password",
       });
 
-      const response = await patchUser("new-password1", {
+      const response = await patchUser("newpassword1", {
         password: "new-password",
       });
 
       await expectSuccessfulUpdate(response, createdUser, {
-        username: "new-password1",
-        email: "new-password1@gmail.com",
+        username: "newpassword1",
       });
 
-      const userInDatabase = await user.findOneByUsername("new-password1");
+      const userInDatabase = await user.findOneByUsername("newpassword1");
       const correctPasswordMatch = await password.compare(
         "new-password",
         userInDatabase.password,
@@ -311,20 +298,7 @@ describe("PATCH /api/v1/users/[username]", () => {
   });
 });
 
-async function createUser({ username, email, password = "senha123" }) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: JSON_HEADERS,
-    body: JSON.stringify({
-      username,
-      email,
-      password,
-    }),
-  });
-
-  expect(response.status).toBe(201);
-  return response.json();
-}
+const createUser = orchestrator.createUser;
 
 async function patchUser(username, body) {
   return fetch(`${BASE_URL}/${username}`, {
@@ -338,13 +312,17 @@ async function expectSuccessfulUpdate(response, createdUser, expectedValues) {
   expect(response.status).toBe(200);
 
   const responseBody = await response.json();
+  const expectedUser = {
+    ...createdUser,
+    ...expectedValues,
+  };
 
   expect(responseBody).toEqual({
-    id: createdUser.id,
-    username: expectedValues.username,
-    email: expectedValues.email,
+    id: expectedUser.id,
+    username: expectedUser.username,
+    email: expectedUser.email,
     password: responseBody.password,
-    created_at: createdUser.created_at,
+    created_at: expectedUser.created_at.toISOString(),
     updated_at: responseBody.updated_at,
   });
 
@@ -352,7 +330,9 @@ async function expectSuccessfulUpdate(response, createdUser, expectedValues) {
   expect(Date.parse(responseBody.created_at)).not.toBeNaN();
   expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
   expect(responseBody.updated_at > responseBody.created_at).toBe(true);
-  expect(responseBody.updated_at).not.toBe(createdUser.updated_at);
+  expect(responseBody.updated_at).not.toBe(
+    createdUser.updated_at.toISOString(),
+  );
 
   return responseBody;
 }

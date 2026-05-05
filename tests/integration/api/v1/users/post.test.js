@@ -184,6 +184,32 @@ describe("POST /api/v1/users", () => {
       });
     });
 
+    test("With invalid 'username'", async () => {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "invalid-username",
+          email: "invalidusername@gmail.com",
+          password: "senha123",
+        }),
+      });
+
+      expect(response.status).toBe(400);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ValidationError",
+        message: "O username deve conter apenas caracteres alfanuméricos.",
+        action:
+          "Informe um username sem caracteres especiais para realizar o cadastro.",
+        status_code: 400,
+      });
+    });
+
     test("With missing 'email'", async () => {
       const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
